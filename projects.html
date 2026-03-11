@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects · Prano Interior Architecture & Design</title>
+  <meta name="description" content="Selected projects by Studio Prano — residential and commercial interiors across Bengaluru, Mumbai, Kochi and Berlin." />
+  <link rel="icon" href="./logoc.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    /* ── TOKENS (matching prano.in exactly) ── */
+    :root {
+      --bg:        #0c0c0b;
+      --surface:   #131310;
+      --surface2:  #1a1a16;
+      --white:     #f4f1ec;
+      --muted:     #b0aca5;
+      --accent:    #c8b89a;
+      --accent-dk: #a8946e;
+      --line:      rgba(255,255,255,0.07);
+      --line-warm: rgba(200,184,154,0.18);
+      --ff-d:      'Cormorant Garamond', serif;
+      --ff-b:      'Jost', sans-serif;
+      --ease:      cubic-bezier(0.16,1,0.3,1);
+      --side:      3.5rem;
+      --side-sm:   1.75rem;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: var(--ff-b);
+      font-weight: 300;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+    button { font-family: var(--ff-b); cursor: pointer; }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.4rem var(--side);
+      background: rgba(12,12,11,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-logo img { height: 21px; width: auto; }
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 2.75rem;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color 0.3s;
+    }
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--white); }
+
+    /* ── HERO ── */
+    .proj-hero {
+      padding: 8rem var(--side) 4rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .proj-hero .label {
+      display: block;
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+    }
+    .proj-hero h1 {
+      font-family: var(--ff-d);
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 400;
+      line-height: 1.08;
+      color: var(--white);
+      margin-bottom: 1.25rem;
+      max-width: 680px;
+    }
+    .proj-hero h1 em { font-style: italic; color: var(--accent); }
+    .proj-hero p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.9;
+      max-width: 480px;
+    }
+
+    /* ── CATEGORY GRID ── */
+    .proj-cats { padding: 4rem var(--side) 5rem; }
+
+    .proj-cat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--line);
+    }
+
+    .proj-cat-card {
+      background: var(--bg);
+      cursor: pointer;
+      transition: background 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .proj-cat-card:hover { background: var(--surface); }
+    .proj-cat-coming { cursor: default; }
+    .proj-cat-coming:hover { background: var(--bg); }
+
+    .proj-cat-img-wrap {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: var(--surface2);
+    }
+    .proj-cat-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(15%);
+      transition: transform 0.8s var(--ease), filter 0.5s ease;
+    }
+    .proj-cat-card:hover .proj-cat-img-wrap img {
+      transform: scale(1.05);
+      filter: grayscale(0%);
+    }
+    .proj-cat-img-wrap.img-missing {
+      display: flex; align-items: center; justify-content: center;
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+    }
+    .proj-cat-overlay {
+      position: absolute;
+      top: 1rem; left: 1rem;
+    }
+    .proj-cat-tag {
+      font-family: var(--ff-b);
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(12,12,11,0.75);
+      padding: 0.3rem 0.65rem;
+      backdrop-filter: blur(4px);
+    }
+    .proj-cat-info {
+      padding: 1.5rem 1.5rem 1.75rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      flex: 1;
+    }
+    .proj-cat-info h3 {
+      font-family: var(--ff-d);
+      font-size: 1.2rem;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 0.35rem;
+    }
+    .proj-cat-info p {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .proj-cat-arrow {
+      color: var(--accent);
+      font-size: 0.9rem;
+      margin-top: 0.2rem;
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+    .proj-cat-card:hover .proj-cat-arrow { transform: translateX(4px); }
+
+    /* Coming soon */
+    .proj-coming-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .proj-coming-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      color: var(--muted);
+    }
+    .proj-coming-inner i { font-size: 2rem; color: var(--accent); opacity: 0.4; }
+    .proj-coming-inner span {
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    /* ── GALLERY VIEW ── */
+    .proj-gallery-view {
+      display: none;
+      padding: 4rem var(--side) 5rem;
+    }
+    .proj-gallery-view.visible { display: block; }
+
+    .pgv-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 2.5rem;
+      gap: 2rem;
+    }
+    .pgv-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: none;
+      border: 1px solid var(--line-warm);
+      color: var(--white);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.65rem 1.1rem;
+      cursor: pointer;
+      transition: border-color 0.3s, background 0.3s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .pgv-back:hover { border-color: var(--accent); background: var(--surface); }
+    .pgv-title-wrap { flex: 1; }
+    .pgv-title-wrap .label { display: block; margin-bottom: 0.4rem; font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+    .pgv-title-wrap h2 {
+      font-family: var(--ff-d);
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
+      font-weight: 400;
+      color: var(--white);
+    }
+    .pgv-count {
+      font-family: var(--ff-d);
+      font-size: clamp(2rem, 4vw, 3rem);
+      color: rgba(255,255,255,0.06);
+      font-weight: 400;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .pgv-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+    }
+    .pgv-item {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: var(--surface2);
+    }
+    .pgv-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      aspect-ratio: 3/2;
+      filter: grayscale(10%);
+      transition: transform 0.7s var(--ease), filter 0.4s ease;
+    }
+    .pgv-item:hover img { transform: scale(1.04); filter: grayscale(0%); }
+    .pgv-item-num {
+      position: absolute;
+      bottom: 0.75rem; right: 0.75rem;
+      font-size: 0.6rem;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.97);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .lightbox.open { opacity: 1; pointer-events: all; }
+
+    .lb-img-wrap {
+      max-width: 90vw;
+      max-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .lb-img-wrap img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      transition: opacity 0.2s ease;
+    }
+    .lb-close {
+      position: fixed;
+      top: 1.5rem; right: 1.75rem;
+      background: none; border: none;
+      color: var(--muted); font-size: 1.5rem;
+      cursor: pointer; transition: color 0.2s;
+      z-index: 10001;
+    }
+    .lb-close:hover { color: var(--white); }
+    .lb-prev, .lb-next {
+      position: fixed;
+      top: 50%; transform: translateY(-50%);
+      background: none;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--muted);
+      font-size: 1rem;
+      padding: 0.9rem 1rem;
+      cursor: pointer;
+      z-index: 10001;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .lb-prev:hover, .lb-next:hover { border-color: var(--accent); color: var(--white); }
+    .lb-prev { left: 1.5rem; }
+    .lb-next { right: 1.5rem; }
+    .lb-counter {
+      position: fixed;
+      bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.2em;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: var(--surface);
+      border-top: 1px solid var(--line);
+      padding: 5rem var(--side) 2.25rem;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 4rem;
+      padding-bottom: 4rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .footer-brand img { height: 20px; width: auto; }
+    .footer-brand p {
+      font-size: 0.875rem;
+      color: var(--muted);
+      margin-top: 1.25rem;
+      max-width: 280px;
+      line-height: 1.85;
+    }
+    .footer-social { display: flex; gap: 0.75rem; margin-top: 1.75rem; }
+    .footer-social a {
+      width: 36px; height: 36px;
+      border: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: 0.875rem;
+      transition: border-color 0.3s, color 0.3s;
+    }
+    .footer-social a:hover { border-color: var(--accent); color: var(--accent); }
+    .footer-col h5 {
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+    .footer-col ul a { font-size: 0.85rem; color: var(--muted); transition: color 0.3s; }
+    .footer-col ul a:hover { color: var(--white); }
+    .footer-cities {
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .footer-contact-row {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 0.6rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+    .footer-contact-row i { color: var(--accent); font-size: 0.75rem; width: 14px; }
+    .footer-contact-row a { color: var(--muted); transition: color 0.3s; }
+    .footer-contact-row a:hover { color: var(--white); }
+    .footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 2.25rem;
+      font-size: 0.72rem;
+      color: rgba(176,172,165,0.5);
+      letter-spacing: 0.04em;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1000px) {
+      .proj-cat-grid { grid-template-columns: repeat(2, 1fr); }
+      .pgv-grid      { grid-template-columns: repeat(2, 1fr); }
+      .footer-top    { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+    }
+    @media (max-width: 680px) {
+      :root { --side: var(--side-sm); }
+      .nav { padding: 1.2rem var(--side-sm); }
+      .nav-links { display: none; }
+      .proj-cat-grid { grid-template-columns: 1fr; }
+      .pgv-grid      { grid-template-columns: 1fr; }
+      .pgv-header    { flex-wrap: wrap; }
+      .pgv-count     { display: none; }
+      .footer-top    { grid-template-columns: 1fr; gap: 2rem; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+      .lb-prev { left: 0.4rem; }
+      .lb-next { right: 0.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a class="nav-logo" href="./index.html">
+      <img src="./Copy of Prano White.png" alt="Studio Prano" />
+    </a>
+    <ul class="nav-links">
+      <li><a href="./index.html">Home</a></li>
+      <li><a href="./index.html#statement">About</a></li>
+      <li><a href="./index.html#services">Services</a></li>
+      <li><a href="./projects.html" class="active">Projects</a></li>
+      <li><a href="./index.html#newproject">Contact</a></li>
+      <li><a href="./index.html#careers">Careers</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="proj-hero">
+    <span class="label">Our Work</span>
+    <h1>Built with intention.<br><em>Remembered.</em></h1>
+    <p>A selection of completed projects across Bengaluru, Mumbai, Kochi and a collaborative body of work between India and Germany.</p>
+  </section>
+
+  <!-- CATEGORY GRID -->
+  <section class="proj-cats" id="catGrid">
+    <div class="proj-cat-grid">
+
+      <div class="proj-cat-card" onclick="openGallery('blr')">
+        <div class="proj-cat-img-wrap" id="blr-thumb">
+          <img src="./blr/blr-01.jpg" alt="Project in Bengaluru" loading="lazy"
+               onerror="this.parentElement.classList.add('img-missing');this.remove()" />
+          <div class="proj-cat-overlay"><span class="proj-cat-tag">Residential</span></div>
+        </div>
+        <div class="proj-cat-info">
+          <div>
+            <h3>Project in Bengaluru</h3>
+            <p>Residential interior</p>
+          </div>
+          <span class="proj-cat-arrow"><i class="fas fa-arrow-right"></i></span>
+        </div>
+      </div>
+
+      <div class="proj-cat-card" onclick="openGallery('mum')">
+        <div class="proj-cat-img-wrap" id="mum-thumb">
+          <img src="./mum/mum-01.jpg" alt="Project in Mumbai" loading="lazy"
+               onerror="this.parentElement.classList.add('img-missing');this.remove()" />
+          <div class="proj-cat-overlay"><span class="proj-cat-tag">Residential</span></div>
+        </div>
+        <div class="proj-cat-info">
+          <div>
+            <h3>Project in Mumbai</h3>
+            <p>Luxury residence</p>
+          </div>
+          <span class="proj-cat-arrow"><i class="fas fa-arrow-right"></i></span>
+        </div>
+      </div>
+
+      <div class="proj-cat-card" onclick="openGallery('kochi')">
+        <div class="proj-cat-img-wrap" id="kochi-thumb">
+          <img src="./kochi/kochi-01.jpg" alt="Project in Kochi" loading="lazy"
+               onerror="this.parentElement.classList.add('img-missing');this.remove()" />
+          <div class="proj-cat-overlay"><span class="proj-cat-tag">Residential</span></div>
+        </div>
+        <div class="proj-cat-info">
+          <div>
+            <h3>Project in Kochi</h3>
+            <p>Residential interior</p>
+          </div>
+          <span class="proj-cat-arrow"><i class="fas fa-arrow-right"></i></span>
+        </div>
+      </div>
+
+      <div class="proj-cat-card" onclick="openGallery('mixed')">
+        <div class="proj-cat-img-wrap" id="mixed-thumb">
+          <img src="./mixed/mixed-01.jpg" alt="Selected Works" loading="lazy"
+               onerror="this.parentElement.classList.add('img-missing');this.remove()" />
+          <div class="proj-cat-overlay"><span class="proj-cat-tag">BLR &times; BER</span></div>
+        </div>
+        <div class="proj-cat-info">
+          <div>
+            <h3>Selected Works</h3>
+            <p>Bengaluru &amp; Berlin fragments</p>
+          </div>
+          <span class="proj-cat-arrow"><i class="fas fa-arrow-right"></i></span>
+        </div>
+      </div>
+
+      <div class="proj-cat-card proj-cat-coming">
+        <div class="proj-cat-img-wrap proj-coming-wrap">
+          <div class="proj-coming-inner">
+            <i class="fas fa-drafting-compass"></i>
+            <span>Will update soon.</span>
+          </div>
+        </div>
+        <div class="proj-cat-info">
+          <div>
+            <h3>Academic Projects</h3>
+            <p>Thesis and studio work from Bangalore University and BIU Berlin.</p>
+          </div>
+          <span class="proj-cat-arrow" style="opacity:0.3"><i class="fas fa-clock"></i></span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- GALLERY VIEW -->
+  <section class="proj-gallery-view" id="galleryView">
+    <div class="pgv-header">
+      <button class="pgv-back" onclick="closeGallery()">
+        <i class="fas fa-arrow-left"></i> All Projects
+      </button>
+      <div class="pgv-title-wrap">
+        <span class="label" id="pgvLabel"></span>
+        <h2 id="pgvTitle"></h2>
+      </div>
+      <span class="pgv-count" id="pgvCount"></span>
+    </div>
+    <div class="pgv-grid" id="pgvGrid"></div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lb-close" onclick="closeLightbox()"><i class="fas fa-xmark"></i></button>
+    <button class="lb-prev" onclick="lbNav(-1);event.stopPropagation()"><i class="fas fa-chevron-left"></i></button>
+    <button class="lb-next" onclick="lbNav(1);event.stopPropagation()"><i class="fas fa-chevron-right"></i></button>
+    <div class="lb-img-wrap"><img id="lbImg" src="" alt="" /></div>
+    <div class="lb-counter" id="lbCounter"></div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="./Copy of Prano White.png" alt="Prano" height="20" />
+        <p>Studio Prano is an international interior architecture and design practice. Founded in Bengaluru. Present in Berlin. Working across India and Europe.</p>
+        <div class="footer-social">
+          <a href="https://www.facebook.com/pranodesigns" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://www.instagram.com/studio.prano" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://twitter.com/StudioPrano" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
+          <a href="https://www.youtube.com/channel/UCb0Zkv6zh1nKrg9dyFsSE5Q" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Navigate</h5>
+        <ul>
+          <li><a href="./index.html">Home</a></li>
+          <li><a href="./index.html#statement">About</a></li>
+          <li><a href="./index.html#services">Services</a></li>
+          <li><a href="./projects.html">Projects</a></li>
+          <li><a href="./index.html#newproject">Contact</a></li>
+          <li><a href="./index.html#careers">Careers</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Get in Touch</h5>
+        <div class="footer-cities">Bengaluru &nbsp;&middot;&nbsp; Berlin</div>
+        <div class="footer-contact-row"><i class="fas fa-phone"></i><a href="tel:+918095950439">+91 80959 50439 IND</a></div>
+        <div class="footer-contact-row"><i class="fas fa-phone"></i><a href="tel:+4917628621967">+49 176 28621967 DE</a></div>
+        <div class="footer-contact-row"><i class="fas fa-envelope"></i><a href="mailto:contact@prano.in">contact@prano.in</a></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Studio Prano. All rights reserved.</span>
+      <span>Interior Architecture &amp; Design &nbsp;&middot;&nbsp; Bengaluru &nbsp;&middot;&nbsp; Berlin</span>
+    </div>
+  </footer>
+
+  <script>
+    const GALLERIES = {
+      blr:   { label: 'Bengaluru · Residential', title: 'Project in Bengaluru', count: 13, folder: 'blr',   prefix: 'blr'   },
+      mum:   { label: 'Mumbai · Luxury Residence', title: 'Project in Mumbai',  count: 26, folder: 'mum',   prefix: 'mum'   },
+      kochi: { label: 'Kochi · Residential',       title: 'Project in Kochi',   count: 8,  folder: 'kochi', prefix: 'kochi' },
+      mixed: { label: 'BLR × BER · Selected Works', title: 'Selected Works',    count: 18, folder: 'mixed', prefix: 'mixed' }
+    };
+
+    let lbImages = [], lbCurrent = 0;
+
+    function openGallery(key) {
+      const g = GALLERIES[key];
+      if (!g) return;
+
+      document.getElementById('catGrid').style.display = 'none';
+      const view = document.getElementById('galleryView');
+      view.classList.add('visible');
+
+      document.getElementById('pgvLabel').textContent = g.label;
+      document.getElementById('pgvTitle').textContent = g.title;
+      document.getElementById('pgvCount').textContent = String(g.count).padStart(2, '0');
+
+      const grid = document.getElementById('pgvGrid');
+      grid.innerHTML = '';
+      lbImages = [];
+
+      for (let i = 1; i <= g.count; i++) {
+        const num  = String(i).padStart(2, '0');
+        const src  = './' + g.folder + '/' + g.prefix + '-' + num + '.jpg';
+        lbImages.push(src);
+
+        const item = document.createElement('div');
+        item.className = 'pgv-item';
+        item.innerHTML =
+          '<img src="' + src + '" alt="' + g.title + ' ' + num + '" loading="lazy" />' +
+          '<span class="pgv-item-num">' + num + '</span>';
+        const idx = i - 1;
+        item.onclick = () => openLightbox(idx);
+        grid.appendChild(item);
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function closeGallery() {
+      document.getElementById('catGrid').style.display = 'block';
+      const view = document.getElementById('galleryView');
+      view.classList.remove('visible');
+      document.getElementById('pgvGrid').innerHTML = '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openLightbox(idx) {
+      lbCurrent = idx;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+      lbShowImage();
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function lbShowImage() {
+      const img = document.getElementById('lbImg');
+      img.style.opacity = '0';
+      img.src = lbImages[lbCurrent];
+      img.onload = () => { img.style.opacity = '1'; };
+      document.getElementById('lbCounter').textContent =
+        (lbCurrent + 1) + ' / ' + lbImages.length;
+    }
+
+    function lbNav(dir) {
+      lbCurrent = (lbCurrent + dir + lbImages.length) % lbImages.length;
+      lbShowImage();
+    }
+
+    document.addEventListener('keydown', e => {
+      const lb = document.getElementById('lightbox');
+      if (!lb.classList.contains('open')) return;
+      if (e.key === 'ArrowLeft')  lbNav(-1);
+      if (e.key === 'ArrowRight') lbNav(1);
+      if (e.key === 'Escape')     closeLightbox();
+    });
+
+    // Touch swipe on lightbox
+    let touchStartX = 0;
+    document.getElementById('lightbox').addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    document.getElementById('lightbox').addEventListener('touchend', e => {
+      const diff = touchStartX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) lbNav(diff > 0 ? 1 : -1);
+    }, { passive: true });
+  </script>
+
+</body>
+</html>
